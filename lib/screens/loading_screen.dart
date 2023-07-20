@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima/services//location.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
@@ -26,10 +26,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getData() async {
-    Response response = await get( Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=' ));
-    print(response.statusCode);
     var test = dotenv.env['TOKEN'];
-    print(test);
+    http.Response response = await http.get( Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=${test}' ));
+    if (response.statusCode == 200) {
+      String data = response.body;
+      print(data);
+    } else {
+      print(response.statusCode);
+    }
+
+
   }
 
 
