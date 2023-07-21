@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clima/services//location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 
 class LoadingScreen extends StatefulWidget {
@@ -22,15 +23,25 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void getLocation() async {
     Location location = Location();
     await location.getCurrentLocation();
-    print(location.longitude);
+     print(location.longitude);
   }
 
   void getData() async {
     var test = dotenv.env['TOKEN'];
-    http.Response response = await http.get( Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=${test}' ));
+    http.Response response = await http.get( Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=$test' ));
     if (response.statusCode == 200) {
       String data = response.body;
-      print(data);
+
+      var temp = jsonDecode(data)['main']['temp'];
+      print(temp);
+
+      var id = jsonDecode(data)['weather'][0]['id'];
+      print(id);
+
+      var cityName = jsonDecode(data)['name'];
+      print(cityName);
+
+
     } else {
       print(response.statusCode);
     }
