@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
-
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
 
@@ -13,6 +12,9 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  late double longitude;
+  late double latitude;
+
   @override
   void initState() {
     super.initState();
@@ -23,37 +25,34 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void getLocation() async {
     Location location = Location();
     await location.getCurrentLocation();
-     print(location.longitude);
+    longitude = location.longitude;
+    latitude = location.latitude;
+    getData();
   }
 
   void getData() async {
     var test = dotenv.env['TOKEN'];
-    http.Response response = await http.get( Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=$test' ));
+    http.Response response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$test'));
     if (response.statusCode == 200) {
       String data = response.body;
 
-      var temp = jsonDecode(data)['main']['temp'];
+      double temp = jsonDecode(data)['main']['temp'];
       print(temp);
 
-      var id = jsonDecode(data)['weather'][0]['id'];
+      int id = jsonDecode(data)['weather'][0]['id'];
       print(id);
 
-      var cityName = jsonDecode(data)['name'];
+      String cityName = jsonDecode(data)['name'];
       print(cityName);
-
-
     } else {
       print(response.statusCode);
     }
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    getData();
-    return Scaffold(
-    );
+    getLocation();
+    return Scaffold();
   }
 }
