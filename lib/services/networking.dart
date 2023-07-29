@@ -10,14 +10,12 @@ class NetworkHelper {
     http.Response response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-       String data = response.body;
-       return jsonDecode(data);
+      String data = response.body;
+      return jsonDecode(data);
 
       // var decodedData = jsonDecode(data);
-    }else {
+    } else {
       print(response.statusCode);
     }
-
-    }
-
-  'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$test'
+  }
+}
