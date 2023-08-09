@@ -35,9 +35,14 @@ class _CityScreenState extends State<CityScreen> {
               ),
               Container(
                 padding: const EdgeInsets.all(20.0),
-                child: null,
+                child: TextField(
+                  style: TextStyle(color: Colors.black),
+                    decoration: textFieldInputDecoration,
+                    onChanged: (value){
+                    print(value);
+                },),
               ),
-             TextButton(
+              TextButton(
                 onPressed: () {},
                 child: const Text(
                   'Get Weather',
